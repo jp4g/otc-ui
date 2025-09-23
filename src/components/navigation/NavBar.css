@@ -1,0 +1,128 @@
+.nav-bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(5, 7, 12, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(98, 109, 163, 0.25);
+}
+
+.nav-bar__inner {
+  margin: 0 auto;
+  padding: 1rem 0;
+  width: min(1200px, 92vw);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-bar__brand {
+  background: none;
+  border: 1px solid rgba(98, 109, 163, 0.4);
+  color: inherit;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.nav-bar__brand:hover,
+.nav-bar__brand:focus-visible {
+  border-color: rgba(142, 152, 211, 0.8);
+  background-color: rgba(170, 186, 255, 0.08);
+}
+
+.nav-bar__brand:focus-visible {
+  outline: 2px solid rgba(142, 152, 211, 0.4);
+  outline-offset: 2px;
+}
+
+.nav-bar__brand-mark {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #4455ff 0%, #54ffe6 100%);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.nav-bar__brand-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.nav-bar__links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-bar__link {
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 500;
+  color: rgba(198, 207, 255, 0.85);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.nav-bar__link:hover,
+.nav-bar__link:focus-visible {
+  background-color: rgba(198, 207, 255, 0.15);
+  color: rgb(255 255 255);
+}
+
+.nav-bar__link--active {
+  background: linear-gradient(135deg, rgba(68, 85, 255, 0.25), rgba(84, 255, 230, 0.35));
+  color: rgb(255 255 255);
+}
+
+.nav-bar__wallet {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 83, 83, 0.4);
+  background: rgba(255, 83, 83, 0.1);
+  font-size: 0.9rem;
+}
+
+.nav-bar__wallet-indicator {
+  display: inline-block;
+  width: 0.65rem;
+  height: 0.65rem;
+  border-radius: 50%;
+  background: rgba(255, 83, 83, 0.9);
+  box-shadow: 0 0 0 6px rgba(255, 83, 83, 0.15);
+}
+
+@media (max-width: 960px) {
+  .nav-bar__inner {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .nav-bar__links {
+    order: 3;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .nav-bar__wallet {
+    order: 2;
+  }
+}
