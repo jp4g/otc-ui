@@ -82,7 +82,7 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Provide mint button that triggers async mint hook; optimistically update balance on success without refetching.
 - [x] Replace mint form with loading spinner + "minting..." text while mint is pending.
 - [x] Reset form state on mint completion/failure; ensure failure re-enables input/button.
-- [ ] Emit toast notifications bottom-left for mint success (green) and failure (red) with relevant message payloads.
+- [x] Emit toast notifications bottom-left for mint success (green) and failure (red) with relevant message payloads.
 - [ ] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
 - [ ] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
 

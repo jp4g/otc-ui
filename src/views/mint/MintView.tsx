@@ -4,12 +4,14 @@ import Spinner from '../../components/primitives/Spinner'
 import { DEFAULT_TOKEN_SYMBOL } from '../../data/tokens'
 import useTokenBalance from '../../hooks/useTokenBalance'
 import useMint from '../../hooks/useMint'
+import useToast from '../../hooks/useToast'
 import './MintView.css'
 
 const MintView = () => {
   const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN_SYMBOL)
   const { amount, status, error, refresh, setLocalBalance } = useTokenBalance(selectedToken)
   const { status: mintStatus, mint, reset: resetMint } = useMint()
+  const { pushToast } = useToast()
   const [mintValue, setMintValue] = useState('')
   const [mintError, setMintError] = useState<string | null>(null)
 
@@ -44,7 +46,7 @@ const MintView = () => {
     }
 
     setMintValue(String(parsed))
-    setMintError(null)
+    setMintError(parsed === 0 ? 'Cannot mint 0 tokens' : null)
   }
 
   const handleMintSubmit = async (event: React.FormEvent) => {
@@ -56,13 +58,21 @@ const MintView = () => {
 
     try {
       const parsedAmount = Number(mintValue)
+      if (parsedAmount === 0) {
+        const message = 'Cannot mint 0 tokens'
+        setMintError(message)
+        pushToast({ message, variant: 'error' })
+        return
+      }
       const result = await mint(selectedToken, parsedAmount)
       if (result.success) {
         setLocalBalance((prev) => prev + parsedAmount)
         setMintValue('')
+        pushToast({ message: result.message, variant: 'success' })
       }
     } catch (err) {
       setMintError(err instanceof Error ? err.message : 'Mint failed')
+      pushToast({ message: err instanceof Error ? err.message : 'Mint failed', variant: 'error' })
     }
   }
 
@@ -87,57 +97,59 @@ const MintView = () => {
       <div className="mint-view__panel">
         <TokenSelector value={selectedToken} onChange={setSelectedToken} />
 
-        <div className="mint-view__balance">
-          <span className="mint-view__balance-label">Balance:</span>
-          <div className="mint-view__balance-value">
-            {status === 'loading' ? (
-              <div className="mint-view__balance-loading">
-                <Spinner size="sm" label="Fetching balance" />
-                <span>Fetching…</span>
-              </div>
-            ) : status === 'error' ? (
-              <span className="mint-view__balance-error">{error ?? 'Unavailable'}</span>
-            ) : (
-              <span>{formattedBalance}</span>
-            )}
-            {(status === 'success' || status === 'error') && (
-              <button
-                type="button"
-                className="mint-view__refresh"
-                onClick={() => refresh()}
-                disabled={status === 'loading'}
-              >
-                refresh
-              </button>
-            )}
+        <div className="mint-view__row">
+          <div className="mint-view__balance">
+            <span className="mint-view__caption">Balance</span>
+            <div className="mint-view__balance-value">
+              {status === 'loading' ? (
+                <div className="mint-view__balance-loading">
+                  <Spinner size="sm" label="Fetching balance" />
+                  <span>Fetching…</span>
+                </div>
+              ) : status === 'error' ? (
+                <span className="mint-view__balance-error">{error ?? 'Unavailable'}</span>
+              ) : (
+                <span>{formattedBalance}</span>
+              )}
+              {(status === 'success' || status === 'error') && (
+                <button
+                  type="button"
+                  className="mint-view__refresh"
+                  onClick={() => refresh()}
+                  disabled={status === 'loading'}
+                >
+                  refresh
+                </button>
+              )}
+            </div>
           </div>
-        </div>
 
-        {!balancePending ? (
-          <form className="mint-view__form" onSubmit={handleMintSubmit}>
-            <label className="mint-view__input-label" htmlFor="mint-amount">
-              Mint amount
-              <input
-                id="mint-amount"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                value={mintValue}
-                onChange={handleMintInputChange}
-                maxLength={9}
-                disabled={mintPending}
-                placeholder="0"
-              />
-            </label>
-            <button
-              type="submit"
-              className="mint-view__mint-button"
-              disabled={mintPending || !mintValue}
-            >
-              Mint
-            </button>
-          </form>
-        ) : null}
+          {!balancePending ? (
+            <form className="mint-view__form" onSubmit={handleMintSubmit}>
+              <label className="mint-view__input-label" htmlFor="mint-amount">
+                <span className="mint-view__caption">Mint amount</span>
+                <input
+                  id="mint-amount"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={mintValue}
+                  onChange={handleMintInputChange}
+                  maxLength={9}
+                  disabled={mintPending}
+                  placeholder="0"
+                />
+              </label>
+              <button
+                type="submit"
+                className="mint-view__mint-button"
+                disabled={mintPending || !mintValue || mintValue === '0'}
+              >
+                Mint
+              </button>
+            </form>
+          ) : null}
+        </div>
 
         {mintPending ? (
           <div className="mint-view__minting">

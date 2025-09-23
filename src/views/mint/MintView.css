@@ -25,17 +25,23 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
-  padding: var(--space-lg);
-  border-radius: var(--radius-lg);
-  background: rgba(14, 17, 26, 0.8);
-  border: 1px solid var(--color-border-soft);
-  box-shadow: var(--shadow-soft);
+  align-items: center;
+}
+
+.mint-view__row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-xl);
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
 }
 
 .mint-view__balance {
   display: flex;
   flex-direction: column;
   gap: var(--space-3xs);
+  align-items: center;
 }
 
 .mint-view__balance-label {
@@ -85,7 +91,7 @@
 .mint-view__form {
   display: flex;
   align-items: flex-end;
-  gap: var(--space-sm);
+  gap: var(--space-lg);
 }
 
 .mint-view__input-label {
