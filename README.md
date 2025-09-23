@@ -47,6 +47,7 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Mint Tokens view component structure and placeholder content
 - [x] Sell (Open Orders) view component structure and placeholder content
 - [x] Buy (Order Matching) view component structure and placeholder content
+- [ ] Token view: interactive mint workflow with balance display, token picker, and toast notifications
 
 ### Reusable Components & Hooks
 
@@ -66,6 +67,26 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Update README with project setup instructions once tooling is in place
 - [ ] Capture open questions or assumptions (e.g., visual design decisions, copy updates)
 - [ ] List future enhancements or stretch goals after MVP is stable
+
+## Token View Build Checklist
+
+- [ ] Define token metadata constant with five hardcoded assets (name, symbol, decimals) and placeholder icons reusable across views.
+- [ ] Implement reusable `TokenSelector` shell that displays selected token icon + symbol and clears to show custom dropdown on click.
+- [ ] Default selector to ETH and preserve previous selection when dropdown dismissed without choosing a new token.
+- [ ] Build styled dropdown list that filters tokens by case-insensitive symbol search as user types; show "No tokens found" when filtered list is empty.
+- [ ] Render token icon + symbol in both collapsed and dropdown states with cohesive design tokens.
+- [ ] Support click selection to close dropdown, update selection, and expose selection change to parent; clicking outside restores prior selection.
+- [ ] Create balance hook/context that fetches async balances with loading and error states per token.
+- [ ] Display "Balance:" row showing spinner while fetching, and render formatted amount once resolved.
+- [ ] Include refresh text-button to re-trigger balance fetch when idle; hide while request is pending.
+- [ ] Add integer-only mint input (no decimals/non-numeric) capped at 999,999,999; hide entire mint form while balance is pending.
+- [ ] Provide mint button that triggers async mint hook; optimistically update balance on success without refetching.
+- [ ] Replace mint form with loading spinner + "minting..." text while mint is pending.
+- [ ] Reset form state on mint completion/failure; ensure failure re-enables input/button.
+- [ ] Emit toast notifications bottom-left for mint success (green) and failure (red) with relevant message payloads.
+- [ ] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
+- [ ] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
+
 
 ## Development With Bun
 
