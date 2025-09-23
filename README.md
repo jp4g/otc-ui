@@ -86,6 +86,19 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [ ] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
 - [ ] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
 
+## Wallet Integration Checklist
+
+- [ ] Install Aztec SDK dependencies (version `3.0.0-nightly.20250923`) required by embedded/extension wallets and supporting utilities.
+- [ ] Port wallet utility modules (`conversion`, `web_logger`, shared styles) or replace their functionality for the OTC UI context.
+- [ ] Implement IndexedDB-backed `WalletDB` using `@aztec/kv-store` and ensure initialization during app bootstrap.
+- [ ] Integrate `EmbeddedWallet` class for Aztec native wallet flows (PXE service bootstrap, account management, sender registry).
+- [ ] Include `ExtensionWallet` adapter to support future browser-extension integrations.
+- [ ] Expose wallet state via React context/hooks (accounts, selected account, connect/disconnect) leveraging the ported wallet logic.
+- [ ] Incorporate account creation flow inside the wallet modal when the embedded/native wallet is selected; skip address book/add-sender components for now.
+- [ ] Replace placeholder wallet status UI with real connection state, account list, and modal flows powered by the new context.
+- [ ] Ensure async flows (PXE startup, account creation, mint) surface errors through toasts and maintain loading affordances.
+- [ ] Document wallet usage (environment assumptions, required services) in the README for future iterations.
+
 ## Development With Bun
 
 We use [Bun](https://bun.sh/) as the package manager and script runner for this project. Make sure Bun is installed (version 1.2.21 or later) before working with the repo.
