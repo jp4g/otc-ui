@@ -9,7 +9,7 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 ### Project Setup
 
 - [x] Initialize Vite + React + TypeScript project scaffold
-- [ ] Establish global styling strategy (e.g., design tokens, typography, spacing scale)
+- [x] Establish global styling strategy (e.g., design tokens, typography, spacing scale)
 - [x] Add basic linting/formatting config (ESLint + Prettier) aligned with TypeScript
 - [x] Document Bun scripts in this README once created
 
@@ -18,7 +18,7 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Define folder structure for components, views, contexts, hooks, and assets
 - [x] Implement routing (landing `/`, `"/mint"`, `"/sell"`, `"/buy"`, plus additional views as needed)
 - [x] Create shared layout wrapping NavBar, footer, and content outlet
-- [ ] Decide on state management approach (React context + hooks) and scaffold base providers
+- [x] Decide on state management approach (React context + hooks) and scaffold base providers
 
 ### NavBar
 
@@ -28,16 +28,16 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 
 ### Wallet Interaction
 
-- [ ] Design wallet status component with red/green state indicator and styled container
-- [ ] Implement wallet context tracking provider, accounts, connection state, and actions
-- [ ] Build connection modal (not connected): provider list with icons, disabled styling for unavailable options, hook up selection handler
-- [ ] Build connected modal view: show full address, dropdown of available accounts, disconnect button, state-driven modal transitions
-- [ ] Wire modal to open from wallet box clicks and respond to external state changes
+- [x] Design wallet status component with red/green state indicator and styled container
+- [x] Implement wallet context tracking provider, accounts, connection state, and actions
+- [x] Build connection modal (not connected): provider list with icons, disabled styling for unavailable options, hook up selection handler
+- [x] Build connected modal view: show full address, dropdown of available accounts, disconnect button, state-driven modal transitions
+- [x] Wire modal to open from wallet box clicks and respond to external state changes
 
 ### Footer
 
-- [ ] Implement minimal footer with "Created by Aztec Pioneers" copy
-- [ ] Add GitHub and Discord icons linking to placeholder (Google) URLs that open in new tabs
+- [x] Implement minimal footer with "Created by Aztec Pioneers" copy
+- [x] Add GitHub and Discord icons linking to placeholder (Google) URLs that open in new tabs
 
 ### Views
 
@@ -50,10 +50,12 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 
 ### Reusable Components & Hooks
 
-- [ ] Build feature card component for landing page reuse
-- [ ] Build modal, dropdown, and button primitives consistent with design system
-- [ ] Implement wallet provider logo components (SVG)
-- [ ] Create hooks for modal visibility, wallet connection requests, and account selection
+- [x] Build feature card component for landing page reuse
+- [x] Build modal primitive consistent with design system
+- [x] Build button primitive consistent with design system
+- [x] Build dropdown primitive consistent with design system
+- [x] Implement wallet provider logo components (SVG)
+- [x] Create hooks for modal visibility, wallet connection requests, and account selection
 
 ### Styling & UX Polish
 
