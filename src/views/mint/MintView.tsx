@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TokenSelector from '../../components/token/TokenSelector'
 import Spinner from '../../components/primitives/Spinner'
 import { DEFAULT_TOKEN_SYMBOL } from '../../data/tokens'
@@ -6,6 +7,7 @@ import useTokenBalance from '../../hooks/useTokenBalance'
 import useMint from '../../hooks/useMint'
 import useToast from '../../hooks/useToast'
 import useWallet from '../../hooks/useWallet'
+import useIsMobile from '../../hooks/useIsMobile'
 import './MintView.css'
 
 const MintViewContent = () => {
@@ -164,6 +166,18 @@ const MintViewContent = () => {
 
 const MintView = () => {
   const { status } = useWallet()
+  const isMobile = useIsMobile()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isMobile) {
+      navigate('/', { replace: true })
+    }
+  }, [isMobile, navigate])
+
+  if (isMobile) {
+    return null
+  }
 
   if (status !== 'connected') {
     return (

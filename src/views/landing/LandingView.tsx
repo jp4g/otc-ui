@@ -1,9 +1,19 @@
 import FeatureCard from '../../components/cards/FeatureCard'
+import useIsMobile from '../../hooks/useIsMobile'
 import './LandingView.css'
 
 const LandingView = () => {
+  const isMobile = useIsMobile()
+
   return (
     <section className="landing">
+      {isMobile ? (
+        <div className="landing__mobile-banner" role="status" aria-live="polite">
+          <strong>This experience is desktop-only.</strong>
+          <span>Please switch to a desktop browser to access the Aztec OTC Desk.</span>
+        </div>
+      ) : null}
+
       <div className="landing__hero">
         <p className="landing__eyebrow">Private OTC trading for Aztec</p>
         <h1>Aztec OTC Desk</h1>

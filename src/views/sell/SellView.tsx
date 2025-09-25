@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState, type ChangeEvent, type FormEventHandler } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TokenSelector from '../../components/token/TokenSelector'
 import { TOKENS } from '../../data/tokens'
 import useSellOrder from '../../hooks/useSellOrder'
 import useWallet from '../../hooks/useWallet'
+import useIsMobile from '../../hooks/useIsMobile'
 import './SellView.css'
 
 const MAX_AMOUNT = 999_999_999
@@ -212,6 +214,18 @@ const SellViewContent = () => {
 
 const SellView = () => {
   const { status } = useWallet()
+  const isMobile = useIsMobile()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isMobile) {
+      navigate('/', { replace: true })
+    }
+  }, [isMobile, navigate])
+
+  if (isMobile) {
+    return null
+  }
 
   if (status !== 'connected') {
     return (

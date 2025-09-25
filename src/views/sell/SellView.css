@@ -151,7 +151,7 @@
 }
 
 .sell-view__submit {
-  align-self: flex-start;
+  align-self: center;
   padding: 0.85rem 2.6rem;
   border-radius: var(--radius-pill);
   border: none;

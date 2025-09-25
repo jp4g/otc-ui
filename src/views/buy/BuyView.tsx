@@ -7,10 +7,12 @@ import {
   type FormEventHandler,
   type SetStateAction,
 } from 'react'
+import { useNavigate } from 'react-router-dom'
 import TokenSelector from '../../components/token/TokenSelector'
 import { TOKENS } from '../../data/tokens'
 import useWallet from '../../hooks/useWallet'
 import useBuyOrder from '../../hooks/useBuyOrder'
+import useIsMobile from '../../hooks/useIsMobile'
 import './BuyView.css'
 
 const MAX_AMOUNT = 999_999_999
@@ -274,6 +276,18 @@ const BuyViewContent = () => {
 
 const BuyView = () => {
   const { status } = useWallet()
+  const isMobile = useIsMobile()
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isMobile) {
+      navigate('/', { replace: true })
+    }
+  }, [isMobile, navigate])
+
+  if (isMobile) {
+    return null
+  }
 
   if (status !== 'connected') {
     return (
