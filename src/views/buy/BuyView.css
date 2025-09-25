@@ -5,6 +5,19 @@
   max-width: 680px;
 }
 
+.buy-view--locked {
+  min-height: 320px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.buy-view--locked p {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 .buy-view h1 {
   margin: 0;
   font-size: var(--font-size-xl);

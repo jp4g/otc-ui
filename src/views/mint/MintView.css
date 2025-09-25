@@ -4,6 +4,19 @@
   gap: var(--space-lg);
 }
 
+.mint-view--locked {
+  min-height: 320px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.mint-view--locked p {
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
 .mint-view__header {
   display: flex;
   flex-direction: column;

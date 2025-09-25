@@ -5,9 +5,10 @@ import { DEFAULT_TOKEN_SYMBOL } from '../../data/tokens'
 import useTokenBalance from '../../hooks/useTokenBalance'
 import useMint from '../../hooks/useMint'
 import useToast from '../../hooks/useToast'
+import useWallet from '../../hooks/useWallet'
 import './MintView.css'
 
-const MintView = () => {
+const MintViewContent = () => {
   const [selectedToken, setSelectedToken] = useState(DEFAULT_TOKEN_SYMBOL)
   const { amount, status, error, refresh, setLocalBalance } = useTokenBalance(selectedToken)
   const { status: mintStatus, mint, reset: resetMint } = useMint()
@@ -159,6 +160,20 @@ const MintView = () => {
       </div>
     </section>
   )
+}
+
+const MintView = () => {
+  const { status } = useWallet()
+
+  if (status !== 'connected') {
+    return (
+      <section className="mint-view mint-view--locked">
+        <p>Please connect a wallet to proceed!</p>
+      </section>
+    )
+  }
+
+  return <MintViewContent />
 }
 
 export default MintView

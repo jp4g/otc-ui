@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState, type ChangeEvent, type FormEventHandler }
 import TokenSelector from '../../components/token/TokenSelector'
 import { TOKENS } from '../../data/tokens'
 import useSellOrder from '../../hooks/useSellOrder'
+import useWallet from '../../hooks/useWallet'
 import './SellView.css'
 
 const MAX_AMOUNT = 999_999_999
 const SELL_DEFAULT = 'ETH'
 const BUY_DEFAULT = 'USDC'
 
-const SellView = () => {
+const SellViewContent = () => {
   const [sellToken, setSellToken] = useState(SELL_DEFAULT)
   const [buyToken, setBuyToken] = useState(BUY_DEFAULT)
 
@@ -207,6 +208,20 @@ const SellView = () => {
       </div>
     </section>
   )
+}
+
+const SellView = () => {
+  const { status } = useWallet()
+
+  if (status !== 'connected') {
+    return (
+      <section className="sell-view sell-view--locked">
+        <p>Please connect a wallet to proceed!</p>
+      </section>
+    )
+  }
+
+  return <SellViewContent />
 }
 
 export default SellView
