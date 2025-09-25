@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-lg);
+  align-items: center;
 }
 
 .sell-view__header {
@@ -9,6 +10,7 @@
   flex-direction: column;
   gap: var(--space-2xs);
   max-width: 720px;
+  align-self: flex-start;
 }
 
 .sell-view__header h1 {
@@ -32,12 +34,14 @@
   background: rgba(14, 17, 26, 0.8);
   border: 1px solid var(--color-border-soft);
   box-shadow: var(--shadow-soft);
+  align-items: center;
 }
 
 .sell-view__form {
   display: flex;
   flex-direction: column;
   gap: var(--space-xl);
+  align-items: center;
 }
 
 .sell-view__form--disabled {
@@ -51,6 +55,8 @@
   border: none;
   padding: 0;
   margin: 0;
+  align-items: center;
+  width: 100%;
 }
 
 .sell-view__field[disabled] {
@@ -66,6 +72,8 @@
   text-transform: uppercase;
   letter-spacing: 0.08em;
   width: min(280px, 100%);
+  align-items: flex-start;
+  text-align: left;
 }
 
 .sell-view__amount input {
@@ -88,6 +96,7 @@
   flex-direction: column;
   gap: var(--space-3xs);
   width: min(360px, 100%);
+  align-items: center;
 }
 
 .sell-view__progress-bar {
@@ -112,6 +121,12 @@
 .sell-view__progress-label {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+  text-align: center;
+}
+
+.sell-view__field .token-selector {
+  width: min(320px, 100%);
+  margin: 0 auto;
 }
 
 .sell-view__field-error {
