@@ -59,9 +59,9 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 
 ### Styling & UX Polish
 
-- [ ] Ensure responsive layout for desktop-first with graceful tablet/mobile behavior
-- [ ] Add hover/focus states, keyboard navigation, and basic accessibility labels
-- [ ] Validate color contrast and typography hierarchy
+- [x] Ensure responsive layout for desktop-first with graceful tablet/mobile behavior
+- [x] Add hover/focus states, keyboard navigation, and basic accessibility labels
+- [x] Validate color contrast and typography hierarchy
 
 - [x] Update README with project setup instructions once tooling is in place
 
@@ -82,7 +82,7 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Reset form state on mint completion/failure; ensure failure re-enables input/button.
 - [x] Emit toast notifications bottom-left for mint success (green) and failure (red) with relevant message payloads.
 - [x] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
-- [ ] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
+- [x] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
 
 ## Sell View Build Checklist
 
@@ -127,4 +127,4 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Incorporate account creation flow inside the wallet modal when the embedded/native wallet is selected; skip address book/add-sender components for now.
 - [x] Replace placeholder wallet status UI with real connection state, account list, and modal flows powered by the new context.
 - [x] Ensure async flows (PXE startup, account creation, mint) surface errors through toasts and maintain loading affordances.
-- [ ] Document wallet usage (environment assumptions, required services) in the README for future iterations.
+- [x] Document wallet usage (environment assumptions, required services) in the README for future iterations.

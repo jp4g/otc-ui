@@ -47,6 +47,7 @@
   border: 1px solid var(--color-border-soft);
   box-shadow: var(--shadow-soft);
   align-items: center;
+  width: min(640px, 100%);
 }
 
 .buy-view__form {
@@ -186,4 +187,28 @@
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
   text-align: center;
+}
+
+@media (max-width: 960px) {
+  .buy-view__panel {
+    padding: var(--space-lg);
+  }
+
+  .buy-view__form {
+    width: 100%;
+  }
+
+  .buy-view__range {
+    flex-wrap: wrap;
+    justify-content: stretch;
+    gap: var(--space-sm);
+  }
+
+  .buy-view__amount {
+    width: 100%;
+  }
+
+  .buy-view__submit {
+    width: 100%;
+  }
 }

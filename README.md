@@ -9,6 +9,12 @@ Aztec's OTC Desk UI is a desktop-first React application built with Vite and Typ
 - Mint, sell, and buy flows using reusable token selectors, validation-aware forms, and toast feedback
 - Shared UI primitives (modals, dropdowns, spinners, feature cards) to keep styling cohesive across views
 
+## Wallet & Environment
+
+- Requires access to an Aztec PXE/Node endpoint (defaults to `http://localhost:8080`).
+- Embedded wallet persists data using IndexedDB; run in a secure context (https/localhost).
+- Connect the embedded wallet before visiting transactional routes; mobile devices are redirected to the landing page.
+
 ## Getting Started
 
 1. Install [Bun](https://bun.sh/) (version 1.2.21 or later).

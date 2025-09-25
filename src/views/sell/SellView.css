@@ -47,6 +47,7 @@
   border: 1px solid var(--color-border-soft);
   box-shadow: var(--shadow-soft);
   align-items: center;
+  width: min(640px, 100%);
 }
 
 .sell-view__form {
@@ -179,4 +180,26 @@
 .sell-view__submit:focus-visible:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 16px 36px rgba(84, 255, 230, 0.28);
+}
+
+@media (max-width: 960px) {
+  .sell-view__panel {
+    padding: var(--space-lg);
+  }
+
+  .sell-view__form {
+    width: 100%;
+  }
+
+  .sell-view__field {
+    align-items: stretch;
+  }
+
+  .sell-view__amount {
+    width: 100%;
+  }
+
+  .sell-view__submit {
+    width: 100%;
+  }
 }

@@ -134,6 +134,10 @@
   outline: none;
 }
 
+.token-selector__option--highlighted {
+  background: rgba(84, 152, 255, 0.22);
+}
+
 .token-selector__option-copy {
   display: flex;
   flex-direction: column;
