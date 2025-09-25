@@ -1,4 +1,12 @@
-import { createContext, useCallback, useMemo, useState, type PropsWithChildren } from 'react'
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from 'react'
 
 export type ToastVariant = 'success' | 'error'
 
@@ -21,18 +29,37 @@ const createId = () => `toast-${Date.now()}-${++idCounter}`
 
 export const ToastProvider = ({ children }: PropsWithChildren) => {
   const [toasts, setToasts] = useState<ToastPayload[]>([])
+  const timeoutsRef = useRef<Record<string, ReturnType<typeof setTimeout>>>({})
+
+  const clearToastTimeout = useCallback((id: string) => {
+    const timeoutId = timeoutsRef.current[id]
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+      delete timeoutsRef.current[id]
+    }
+  }, [])
 
   const removeToast = useCallback((id: string) => {
     setToasts((prev) => prev.filter((toast) => toast.id !== id))
-  }, [])
+    clearToastTimeout(id)
+  }, [clearToastTimeout])
 
   const pushToast = useCallback(
     (toast: Omit<ToastPayload, 'id'>) => {
       const id = createId()
       setToasts((prev) => [...prev, { ...toast, id }])
-      setTimeout(() => removeToast(id), 5500)
+      const timeoutId = setTimeout(() => removeToast(id), 5500)
+      timeoutsRef.current[id] = timeoutId
     },
     [removeToast],
+  )
+
+  useEffect(
+    () => () => {
+      Object.values(timeoutsRef.current).forEach((timeoutId) => clearTimeout(timeoutId))
+      timeoutsRef.current = {}
+    },
+    [],
   )
 
   const value = useMemo<ToastContextValue>(

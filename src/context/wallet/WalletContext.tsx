@@ -9,8 +9,7 @@ import {
 import type { Aliased } from '@aztec/aztec.js'
 import type { Wallet } from '@aztec/aztec.js/wallet'
 import { AztecAddress } from '@aztec/stdlib/aztec-address'
-import { EmbeddedWallet } from '../../wallet/embeddedWallet'
-import { ExtensionWallet } from '../../wallet/extensionWallet'
+import type { EmbeddedWallet } from '../../wallet/embeddedWallet'
 
 export type WalletStatus = 'disconnected' | 'connecting' | 'connected'
 export type WalletProviderType = 'embedded' | 'extension'
@@ -144,9 +143,11 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       try {
         if (provider === 'embedded') {
+          const { EmbeddedWallet } = await import('../../wallet/embeddedWallet')
           const wallet = await EmbeddedWallet.create(DEFAULT_NODE_URL)
           walletHandleRef.current = { type: 'embedded', instance: wallet }
         } else {
+          const { ExtensionWallet } = await import('../../wallet/extensionWallet')
           const wallet = ExtensionWallet.create()
           walletHandleRef.current = { type: 'extension', instance: wallet }
         }
