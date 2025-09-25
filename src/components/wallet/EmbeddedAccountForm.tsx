@@ -8,8 +8,8 @@ import { AccountTypes, type AccountType } from '../../wallet/walletDB'
 import useToast from '../../hooks/useToast'
 
 const ACCOUNT_TYPE_LABELS: Record<AccountType, string> = {
-  schnorr: 'Schnorr',
-  ecdsasecp256r1: 'ECDSA R1 (recommended)',
+  schnorr: 'Schnorr (recommended)',
+  ecdsasecp256r1: 'ECDSA R1',
   ecdsasecp256k1: 'ECDSA K1',
 }
 
@@ -27,7 +27,7 @@ type EmbeddedAccountFormProps = {
 
 const EmbeddedAccountForm = ({ wallet, onCreated }: EmbeddedAccountFormProps) => {
   const [alias, setAlias] = useState('')
-  const [accountType, setAccountType] = useState<AccountType>('ecdsasecp256r1')
+  const [accountType, setAccountType] = useState<AccountType>('schnorr')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const { pushToast } = useToast()
