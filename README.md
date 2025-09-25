@@ -103,6 +103,23 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 
 - `src/hooks/useSellOrder.ts`: mocks escrow creation and deposit wallet interactions with staged delays, toast integration, and auto-reset after success/failure.
 
+## Buy View Build Checklist
+
+- [x] Scaffold buy view shell replicating card layout with vertically stacked sell/buy selectors and dual amount rows.
+- [x] Reuse `TokenSelector` for sell/buy legs with mutual exclusion and USDC/ETH defaults.
+- [x] Implement paired min/max amount inputs per leg with shared validation (non-numeric, zero, >999,999,999) and inline messaging.
+- [x] Ensure min ≤ max for both legs, surfacing user guidance when invalid.
+- [x] Compose confirm action button with disabled states reflecting validation + workflow progress.
+- [x] Build buy workflow hook mocking single-transaction flow (sign → submit) with progress milestones and reset mechanics.
+- [x] Render progress bar with 0/50/100% states tied to signature + confirmation outcomes.
+- [x] Trigger success/error toasts summarising order parameters; on failure, restore prior inputs and stop progress bar.
+- [x] Prevent duplicate submissions while workflow is active and re-enable immediately after completion/reset.
+- [ ] Add unit/component coverage for mocked hook timing + UI transitions once MVP behaviour is stable.
+
+## Buy View Mock References
+
+- `src/hooks/useBuyOrder.ts`: mocks signature + confirmation stages for buy orders with deterministic delays, progress integration, and toast messaging.
+
 ## Wallet Integration Checklist
 
 - [x] Install Aztec SDK dependencies (version `3.0.0-nightly.20250923`) required by embedded/extension wallets and supporting utilities.
