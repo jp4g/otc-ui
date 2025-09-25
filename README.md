@@ -86,6 +86,23 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
 - [ ] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
 
+## Sell View Build Checklist
+
+- [x] Scaffold sell view route + component shell mirroring mint page layout with central card container.
+- [x] Wire reusable `TokenSelector` instances for sell/buy legs with mutually-exclusive token enforcement and ETH/USDC defaults.
+- [x] Implement shared integer-only amount inputs with validation (`0`, `>999,999,999`, non-numeric) and per-field error messaging.
+- [x] Compose stacked action module (sell selector, sell amount, buy selector, buy amount, confirm button) with responsive spacing.
+- [x] Create sale workflow hook handling mocked escrow creation & deposit calls, progress state machine, and reset logic.
+- [x] Render progress bar (0 → 100%) reacting to hook phases (pre-sign, signed, confirmed for each tx) and reset after success/failure.
+- [x] Integrate toast notifications for sale success/failure summarising token pair + amount.
+- [x] Ensure UI gracefully reverts to idle state on any failure while preserving prior input selections.
+- [x] Add loading/disabled states to prevent duplicate submissions during in-flight operations.
+- [ ] Cover unit/component tests for sale workflow hook (mock timers) and UI state transitions.
+
+## Sell View Mock References
+
+- `src/hooks/useSellOrder.ts`: mocks escrow creation and deposit wallet interactions with staged delays, toast integration, and auto-reset after success/failure.
+
 ## Wallet Integration Checklist
 
 - [x] Install Aztec SDK dependencies (version `3.0.0-nightly.20250923`) required by embedded/extension wallets and supporting utilities.
