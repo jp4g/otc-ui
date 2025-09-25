@@ -44,7 +44,7 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Landing page: hero text for "Aztec OTC Desk" and supporting copy emphasizing privacy
 - [x] Landing page: four feature cards (Private matching, Private execution, Private counterparties, Instant finality)
 - [x] Landing page: placeholder "How to use" section with temporary content
-- [ ] Mint view: interactive mint workflow with balance display, token picker, and toast notifications
+- [x] Mint view: interactive mint workflow with balance display, token picker, and toast notifications
 - [x] Sell (Open Orders) view component structure and placeholder content
 - [x] Buy (Order Matching) view component structure and placeholder content
 
@@ -83,20 +83,20 @@ This repository hosts the Aztec OTC Desk front-end, built with Vite and TypeScri
 - [x] Replace mint form with loading spinner + "minting..." text while mint is pending.
 - [x] Reset form state on mint completion/failure; ensure failure re-enables input/button.
 - [x] Emit toast notifications bottom-left for mint success (green) and failure (red) with relevant message payloads.
-- [ ] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
+- [x] Ensure dropdown, spinner, and toast components are reusable primitives for other flows.
 - [ ] Cover accessibility basics: focus management, keyboard navigation in dropdown, ARIA roles for status/toasts.
 
 ## Wallet Integration Checklist
 
-- [ ] Install Aztec SDK dependencies (version `3.0.0-nightly.20250923`) required by embedded/extension wallets and supporting utilities.
-- [ ] Port wallet utility modules (`conversion`, `web_logger`, shared styles) or replace their functionality for the OTC UI context.
-- [ ] Implement IndexedDB-backed `WalletDB` using `@aztec/kv-store` and ensure initialization during app bootstrap.
-- [ ] Integrate `EmbeddedWallet` class for Aztec native wallet flows (PXE service bootstrap, account management, sender registry).
-- [ ] Include `ExtensionWallet` adapter to support future browser-extension integrations.
-- [ ] Expose wallet state via React context/hooks (accounts, selected account, connect/disconnect) leveraging the ported wallet logic.
-- [ ] Incorporate account creation flow inside the wallet modal when the embedded/native wallet is selected; skip address book/add-sender components for now.
-- [ ] Replace placeholder wallet status UI with real connection state, account list, and modal flows powered by the new context.
-- [ ] Ensure async flows (PXE startup, account creation, mint) surface errors through toasts and maintain loading affordances.
+- [x] Install Aztec SDK dependencies (version `3.0.0-nightly.20250923`) required by embedded/extension wallets and supporting utilities.
+- [x] Port wallet utility modules (`conversion`, `web_logger`, shared styles) or replace their functionality for the OTC UI context.
+- [x] Implement IndexedDB-backed `WalletDB` using `@aztec/kv-store` and ensure initialization during app bootstrap.
+- [x] Integrate `EmbeddedWallet` class for Aztec native wallet flows (PXE service bootstrap, account management, sender registry).
+- [x] Include `ExtensionWallet` adapter to support future browser-extension integrations.
+- [x] Expose wallet state via React context/hooks (accounts, selected account, connect/disconnect) leveraging the ported wallet logic.
+- [x] Incorporate account creation flow inside the wallet modal when the embedded/native wallet is selected; skip address book/add-sender components for now.
+- [x] Replace placeholder wallet status UI with real connection state, account list, and modal flows powered by the new context.
+- [x] Ensure async flows (PXE startup, account creation, mint) surface errors through toasts and maintain loading affordances.
 - [ ] Document wallet usage (environment assumptions, required services) in the README for future iterations.
 
 ## Development With Bun

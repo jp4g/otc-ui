@@ -4,14 +4,17 @@ const SYMBOL_BASE = {
   AZS: 123.78,
   PRV: 905.12,
   RLC: 45.67,
-} satisfies Record<string, number>
+} as const
+
+type SupportedSymbol = keyof typeof SYMBOL_BASE
 
 const delay = (min = 450, max = 1200) =>
   new Promise((resolve) => setTimeout(resolve, Math.random() * (max - min) + min))
 
 export const fetchTokenBalance = async (symbol: string): Promise<number> => {
   await delay()
-  const base = SYMBOL_BASE[symbol] ?? 1
+  const key = symbol.toUpperCase() as SupportedSymbol
+  const base = SYMBOL_BASE[key] ?? 1
   const noise = Math.random() * base
   return parseFloat((base + noise).toFixed(4))
 }

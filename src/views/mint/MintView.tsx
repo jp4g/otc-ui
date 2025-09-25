@@ -111,12 +111,7 @@ const MintView = () => {
               <span>{formattedBalance}</span>
             )}
             {(status === 'success' || status === 'error') && (
-              <button
-                type="button"
-                className="mint-view__refresh"
-                onClick={() => refresh()}
-                disabled={status === 'loading'}
-              >
+              <button type="button" className="mint-view__refresh" onClick={() => refresh()}>
                 refresh
               </button>
             )}

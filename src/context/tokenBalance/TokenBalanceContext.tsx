@@ -35,11 +35,12 @@ const initialState: Record<string, TokenBalanceState> = TOKENS.reduce(
 
 export const TokenBalanceProvider = ({ children }: PropsWithChildren) => {
   const [balances, setBalances] = useState(initialState)
-  const inflightRequests = useRef<Record<string, Promise<void>>>({})
+  const inflightRequests = useRef<Record<string, Promise<void> | undefined>>({})
 
   const refreshBalance = useCallback(async (symbol: string) => {
-    if (inflightRequests.current[symbol]) {
-      return inflightRequests.current[symbol]
+    const existing = inflightRequests.current[symbol]
+    if (existing) {
+      return existing
     }
 
     const request = (async () => {

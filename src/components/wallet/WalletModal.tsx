@@ -1,175 +1,257 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Modal from '../primitives/Modal'
 import Button from '../primitives/Button'
-import Dropdown from '../primitives/dropdown/Dropdown'
-import ProviderLogos, { type ProviderLogoId } from '../icons/ProviderLogos'
+import Spinner from '../primitives/Spinner'
+import ProviderLogos from '../icons/ProviderLogos'
 import useWallet from '../../hooks/useWallet'
+import useToast from '../../hooks/useToast'
+import EmbeddedAccountForm from './EmbeddedAccountForm'
 import './WalletModal.css'
 
-type WalletModalProps = {
-  open: boolean
-  onClose: () => void
-}
-
-type ProviderOption = {
-  id: string
-  name: string
-  description: string
-  available: boolean
-  logoId: ProviderLogoId
-}
-
-const providerOptions: ProviderOption[] = [
-  {
-    id: 'aztec-native',
+const PROVIDER_DESCRIPTIONS = {
+  embedded: {
     name: 'Aztec Native Wallet',
-    description: 'Shielded wallet with native Aztec sync',
-    available: true,
-    logoId: 'aztec-native',
+    description: 'Full PXE-powered wallet running inside the application sandbox.',
   },
-  {
-    id: 'ledger-shield',
-    name: 'Ledger Shield',
-    description: 'Hardware signing for institutional desks',
-    available: false,
-    logoId: 'ledger-shield',
+  extension: {
+    name: 'Extension Wallet',
+    description: 'Connect to a browser extension wallet (coming soon).',
   },
-  {
-    id: 'browser-bridge',
-    name: 'Browser Bridge',
-    description: 'Connect an external wallet via secure bridge',
-    available: false,
-    logoId: 'browser-bridge',
-  },
-]
+} as const
 
-const WalletModal = ({ open, onClose }: WalletModalProps) => {
-  const { status, connect, disconnect, accounts, activeAccount, setActiveAccount } = useWallet()
-  const [pendingProviderId, setPendingProviderId] = useState<string | null>(null)
-  const isConnected = status === 'connected'
+const WalletModal = ({ open, onClose }: { open: boolean; onClose: () => void }) => {
+  const {
+    status,
+    providerType,
+    accounts,
+    activeAccount,
+    wallet,
+    connect,
+    disconnect,
+    setActiveAccount,
+    refreshAccounts,
+  } = useWallet()
+  const { pushToast } = useToast()
+
+  const [pendingProvider, setPendingProvider] = useState<'embedded' | 'extension' | null>(null)
+  const [showCreateAccount, setShowCreateAccount] = useState(false)
+
+  useEffect(() => {
+    if (!open) {
+      setPendingProvider(null)
+      setShowCreateAccount(false)
+    }
+  }, [open])
 
   const modalMeta = useMemo(() => {
-    if (isConnected) {
+    if (status === 'connecting') {
       return {
-        title: 'Wallet connected',
-        description: 'Manage the active account or disconnect from the OTC desk session.',
+        title: 'Connecting wallet…',
+        description: 'Authorising PXE and syncing account data. This may take a moment.',
+      }
+    }
+
+    if (status === 'connected') {
+      const providerName = providerType ? PROVIDER_DESCRIPTIONS[providerType].name : 'Wallet'
+      return {
+        title: `${providerName} connected`,
+        description: 'Manage accounts, switch active session, or disconnect below.',
       }
     }
 
     return {
-      title: 'Connect your wallet',
-      description:
-        'Choose a provider to begin a private session. Options marked coming soon are placeholders.',
+      title: 'Connect a wallet',
+      description: 'Choose a provider to begin a private Aztec session.',
     }
-  }, [isConnected])
+  }, [status, providerType])
 
-  const handleProviderSelect = async (option: ProviderOption) => {
-    if (!option.available || status === 'connecting') {
+  const handleConnect = async (provider: 'embedded' | 'extension') => {
+    if (status === 'connecting') {
       return
     }
-
-    setPendingProviderId(option.id)
+    setPendingProvider(provider)
     try {
-      await connect()
-      onClose()
+      await connect(provider)
+      pushToast({
+        message: `${PROVIDER_DESCRIPTIONS[provider].name} connected`,
+        variant: 'success',
+      })
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : `Unable to connect ${PROVIDER_DESCRIPTIONS[provider].name}`
+      pushToast({ message, variant: 'error' })
     } finally {
-      setPendingProviderId(null)
+      setPendingProvider(null)
     }
   }
 
-  const handleDisconnect = () => {
-    disconnect()
+  const handleDisconnect = async () => {
+    await disconnect()
+    pushToast({ message: 'Wallet disconnected', variant: 'success' })
     onClose()
   }
+
+  const handleAccountCreated = async (address: string) => {
+    const refreshed = await refreshAccounts()
+    const created = refreshed.find((account) => account.address === address)
+    if (created) {
+      setActiveAccount(created.address)
+    }
+    setShowCreateAccount(false)
+  }
+
+  const isEmbedded = providerType === 'embedded' && wallet?.type === 'embedded'
+  const isConnecting = status === 'connecting'
+  const isConnected = status === 'connected'
 
   return (
     <Modal
       open={open}
       onClose={() => {
-        if (status !== 'connecting') {
+        if (!isConnecting) {
           onClose()
         }
       }}
       title={modalMeta.title}
       description={modalMeta.description}
     >
+      {status === 'disconnected' ? (
+        <div className="wallet-modal__providers">
+          <button
+            type="button"
+            className="wallet-modal__provider"
+            onClick={() => handleConnect('embedded')}
+            disabled={isConnecting || pendingProvider === 'embedded'}
+          >
+            <div className="wallet-modal__provider-main">
+              <span className="wallet-modal__provider-logo-wrapper">
+                <ProviderLogos id="aztec-native" />
+              </span>
+              <div className="wallet-modal__provider-content">
+                <span className="wallet-modal__provider-name">
+                  {PROVIDER_DESCRIPTIONS.embedded.name}
+                </span>
+                <p className="wallet-modal__provider-description">
+                  {PROVIDER_DESCRIPTIONS.embedded.description}
+                </p>
+              </div>
+            </div>
+            {pendingProvider === 'embedded' ? (
+              <span className="wallet-modal__provider-loading">Connecting…</span>
+            ) : null}
+          </button>
+
+          <button
+            type="button"
+            className="wallet-modal__provider wallet-modal__provider--disabled"
+            onClick={() =>
+              pushToast({ message: 'Extension wallet not available yet', variant: 'error' })
+            }
+            disabled
+          >
+            <div className="wallet-modal__provider-main">
+              <span className="wallet-modal__provider-logo-wrapper">
+                <ProviderLogos id="browser-bridge" />
+              </span>
+              <div className="wallet-modal__provider-content">
+                <div className="wallet-modal__provider-headline">
+                  <span className="wallet-modal__provider-name">
+                    {PROVIDER_DESCRIPTIONS.extension.name}
+                  </span>
+                  <span className="wallet-modal__provider-pill">Soon</span>
+                </div>
+                <p className="wallet-modal__provider-description">
+                  {PROVIDER_DESCRIPTIONS.extension.description}
+                </p>
+              </div>
+            </div>
+          </button>
+        </div>
+      ) : null}
+
+      {isConnecting ? (
+        <div className="wallet-modal__connecting">
+          <Spinner label="Connecting" />
+          <span>Authorising wallet…</span>
+        </div>
+      ) : null}
+
       {isConnected ? (
         <div className="wallet-modal__connected">
-          <div className="wallet-modal__status-chip">Session active</div>
-          <dl className="wallet-modal__details">
-            <div>
-              <dt>Active account</dt>
-              <dd>
-                <div className="wallet-modal__account-select">
-                  <Dropdown
-                    label="Active account"
-                    options={accounts.map((account) => ({
-                      label: `${account.label} · ${account.address.slice(0, 6)}…${account.address.slice(-4)}`,
-                      value: account.address,
-                    }))}
-                    value={activeAccount?.address}
-                    onChange={setActiveAccount}
-                  />
-                </div>
-              </dd>
+          <div className="wallet-modal__status-chip">
+            {PROVIDER_DESCRIPTIONS[providerType ?? 'embedded'].name}
+          </div>
+
+          <div className="wallet-modal__accounts">
+            <span className="wallet-modal__section-title">Accounts</span>
+            {accounts.length === 0 ? (
+              <p className="wallet-modal__empty">No accounts yet</p>
+            ) : (
+              <ul className="wallet-modal__account-list">
+                {accounts.map((account) => {
+                  const isActive = account.address === activeAccount?.address
+                  return (
+                    <li key={account.address}>
+                      <button
+                        type="button"
+                        className={
+                          isActive
+                            ? 'wallet-modal__account-button wallet-modal__account-button--active'
+                            : 'wallet-modal__account-button'
+                        }
+                        onClick={() => setActiveAccount(account.address)}
+                      >
+                        <span>{account.label}</span>
+                        <span className="wallet-modal__account-address">
+                          {account.address.slice(0, 6)}…{account.address.slice(-4)}
+                        </span>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            )}
+          </div>
+
+          {activeAccount ? (
+            <div className="wallet-modal__details">
+              <div>
+                <span className="wallet-modal__section-title">Active address</span>
+                <div className="wallet-modal__address">{activeAccount.address}</div>
+              </div>
             </div>
-            <div>
-              <dt>Full address</dt>
-              <dd className="wallet-modal__address">{activeAccount?.address}</dd>
+          ) : null}
+
+          {isEmbedded && wallet?.type === 'embedded' ? (
+            <div className="wallet-modal__embedded">
+              <div className="wallet-modal__embedded-header">
+                <span className="wallet-modal__section-title">Embedded wallet</span>
+                <button
+                  type="button"
+                  className="wallet-modal__embedded-toggle"
+                  onClick={() => setShowCreateAccount((prev) => !prev)}
+                >
+                  {showCreateAccount ? 'Cancel' : 'Create new account'}
+                </button>
+              </div>
+              {showCreateAccount ? (
+                <EmbeddedAccountForm wallet={wallet.instance} onCreated={handleAccountCreated} />
+              ) : null}
             </div>
-          </dl>
+          ) : null}
+
           <div className="wallet-modal__connected-actions">
-            <Button variant="secondary" block onClick={handleDisconnect}>
+            <Button variant="secondary" block onClick={() => refreshAccounts()}>
+              Refresh accounts
+            </Button>
+            <Button variant="ghost" onClick={handleDisconnect}>
               Disconnect
             </Button>
           </div>
         </div>
-      ) : (
-        <>
-          <div className="wallet-modal__providers" role="list">
-            {providerOptions.map((option) => {
-              const isPending = pendingProviderId === option.id && status === 'connecting'
-              const isDisabled = !option.available || status === 'connecting'
-
-              return (
-                <button
-                  key={option.id}
-                  type="button"
-                  role="listitem"
-                  className={`wallet-modal__provider${
-                    !option.available ? ' wallet-modal__provider--disabled' : ''
-                  }${isPending ? ' wallet-modal__provider--pending' : ''}`}
-                  onClick={() => handleProviderSelect(option)}
-                  disabled={isDisabled}
-                >
-                  <div className="wallet-modal__provider-main">
-                    <span className="wallet-modal__provider-logo-wrapper">
-                      <ProviderLogos id={option.logoId} />
-                    </span>
-                    <div className="wallet-modal__provider-content">
-                      <div className="wallet-modal__provider-headline">
-                        <span className="wallet-modal__provider-name">{option.name}</span>
-                        {!option.available ? (
-                          <span className="wallet-modal__provider-pill">Soon</span>
-                        ) : null}
-                      </div>
-                      <p className="wallet-modal__provider-description">{option.description}</p>
-                    </div>
-                  </div>
-                  {isPending ? (
-                    <span className="wallet-modal__provider-loading">Connecting…</span>
-                  ) : null}
-                </button>
-              )
-            })}
-          </div>
-          <div className="wallet-modal__actions">
-            <Button variant="ghost" onClick={onClose} disabled={status === 'connecting'}>
-              Cancel
-            </Button>
-          </div>
-        </>
-      )}
+      ) : null}
     </Modal>
   )
 }
